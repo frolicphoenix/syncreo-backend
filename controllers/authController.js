@@ -17,16 +17,37 @@ exports.register = async (req, res) => {
 
 // Login User
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (user && await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
-      res.json({ token });
-    } else {
-      res.status(401).json({ error: 'Invalid credentials' });
-    }
+    const { email, password } = req.body;
+
+    // Find the user by email
+    const user = await User.findOne({ email }).select('name email profilePicture password role');
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Check the password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
+
+    // Generate a JWT token
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
+
+    // Log to verify the user data
+    console.log('User data:', { name: user.name, email: user.email, profilePicture: user.profilePicture });
+
+    // Respond with the token and user details
+    res.json({
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        profilePicture: user.profilePicture || '',
+      },
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Login failed' });
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 };

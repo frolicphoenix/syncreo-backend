@@ -25,9 +25,12 @@ exports.submitProposal = async (req, res) => {
 exports.getProposalsForProject = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const proposals = await Proposal.find({ project: projectId }).populate('freelancer', 'name email');
+    const proposals = await Proposal.find({ project: projectId })
+      .populate('freelancer', 'name email'); // Populate freelancer name and email
+
     res.json(proposals);
   } catch (error) {
+    console.error('Error retrieving proposals:', error);
     res.status(500).json({ error: 'Error retrieving proposals' });
   }
 };

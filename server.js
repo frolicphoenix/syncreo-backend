@@ -15,8 +15,12 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: "https://syncreo-backend-16cdca97e410.herokuapp.com/"
+    origin: "https://syncreo-backend-16cdca97e410.herokuapp.com/",
+    optionsSuccessStatus: 200,
 }));
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Routes

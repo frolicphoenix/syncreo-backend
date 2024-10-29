@@ -10,15 +10,13 @@ const app = express();
 
 // Update CORS settings
 const corsOptions = {
-  origin: 'https://syncreo-ca4cce3d6642.herokuapp.com', // replace with your frontend Heroku URL
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS', // explicitly allow all methods
-  allowedHeaders: 'Content-Type,Authorization', // allow these headers
-  credentials: true,
-  optionsSuccessStatus: 200,
-};
-
+    origin: 'https://syncreo-ca4cce3d6642.herokuapp.com/',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // handle preflight requests
+app.options('*', cors(corsOptions)); // Preflight support
+  
 
 app.use(express.json());
 

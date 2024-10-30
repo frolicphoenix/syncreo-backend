@@ -1,17 +1,17 @@
 // routes/proposalRoutes.js
 const express = require('express');
-const { submitProposal, getProposalsForProject, getProposalById } = require('../controllers/proposalController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const { submitProposal, getProposalsForFreelancer, getProposalsForClient } = require('../controllers/proposalController');
+const authMiddleware = require('../middlewares/authMiddleware'); // Use authMiddleware instead
 
 const router = express.Router();
 
-// POST /api/proposals - Submit a new proposal (only for freelancers)
+// Submit a proposal (freelancers only)
 router.post('/', authMiddleware, submitProposal);
 
-// GET /api/proposals/project/:projectId - Get all proposals for a project (for clients)
-router.get('/project/:projectId', authMiddleware, getProposalsForProject);
+// Get all submitted proposals for the logged-in freelancer
+router.get('/freelancer/:freelancerId', authMiddleware, getProposalsForFreelancer);
 
-// GET /api/proposals/:id - Get a single proposal by ID
-router.get('/:id', authMiddleware, getProposalById);
+// Get all received proposals for the logged-in client
+router.get('/client/:clientId', authMiddleware, getProposalsForClient);
 
 module.exports = router;

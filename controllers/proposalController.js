@@ -1,4 +1,5 @@
 const Proposal = require('../models/Proposal');
+const Project = require('../models/Project');
 
 // Submit a new proposal (only for freelancers)
 exports.submitProposal = async (req, res) => {
@@ -20,16 +21,30 @@ exports.submitProposal = async (req, res) => {
   }
 };
 
-// Get all proposals for a specific project (only for the client who owns the project)
-exports.getProposalsForProject = async (req, res) => {
+// Get submitted proposals for a freelancer
+exports.getProposalsForFreelancer = async (req, res) => {
   try {
-    const { projectId } = req.params;
-    const proposals = await Proposal.find({ project: projectId })
-      .populate('freelancer', 'name email'); // Populate freelancer name and email
-
+    const proposals = await Proposal.find({ freelancer: req.user.id })
+      .populate('project', 'title'); // Populate project title
     res.json(proposals);
   } catch (error) {
-    console.error('Error retrieving proposals:', error);
+    console.error('Error retrieving freelancer proposals:', error);
+    res.status(500).json({ error: 'Error retrieving proposals' });
+  }
+};
+
+// Get received proposals for all projects owned by a client
+exports.getProposalsForClient = async (req, res) => {
+  try {
+    const projects = await Project.find({ client: req.user.id });
+    const projectIds = projects.map((project) => project._id);
+    
+    const proposals = await Proposal.find({ project: { $in: projectIds } })
+      .populate('freelancer', 'name email') // Populate freelancer name and email
+      .populate('project', 'title'); // Populate project title
+    res.json(proposals);
+  } catch (error) {
+    console.error('Error retrieving client proposals:', error);
     res.status(500).json({ error: 'Error retrieving proposals' });
   }
 };

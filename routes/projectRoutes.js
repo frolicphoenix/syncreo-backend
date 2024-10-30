@@ -3,6 +3,8 @@ const express = require('express');
 const { createProject, getAllProjects, getProjectById, searchProjects, getClientProjects } = require('../controllers/projectController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
+const Project = require('../models/Project');
+
 const router = express.Router();
 
 // POST /api/projects - Create a new project (only for clients)
@@ -19,5 +21,14 @@ router.get('/:id', authMiddleware, getProjectById);
 
 // GET /api/projects/search - Search projects (available to freelancers)
 router.get('/search', authMiddleware, searchProjects);
+
+router.get('/client/:clientId', async (req, res) => {
+    try {
+      const projects = await Project.find({ client: req.params.clientId });
+      res.json(projects);
+    } catch (error) {
+      res.status(500).json({ error: 'Error fetching client projects' });
+    }
+});
 
 module.exports = router;

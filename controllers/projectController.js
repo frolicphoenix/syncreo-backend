@@ -72,11 +72,11 @@ exports.searchProjects = async (req, res) => {
 // Function to get projects posted by the authenticated client
 exports.getClientProjects = async (req, res) => {
   try {
-    const { clientId } = req.params;
-    const projects = await Project.find({ client: clientId });
-    res.json(projects);
+    // Find projects where the client ID matches the authenticated user ID
+    const clientProjects = await Project.find({ client: req.user.id });
+    res.json(clientProjects);
   } catch (error) {
     console.error('Error fetching client projects:', error);
-    res.status(500).json({ error: 'Error fetching client projects' });
+    res.status(500).json({ error: 'Failed to fetch client projects.' });
   }
 };

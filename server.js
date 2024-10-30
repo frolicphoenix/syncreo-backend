@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
 const adminAuthRoutes = require('./routes/adminAuthRoutes'); 
+const adminUserRoutes = require('./routes/adminUserRoutes');
+const adminProjectRoutes = require('./routes/adminProjectRoutes');
 
 dotenv.config();
 connectDB();
@@ -20,11 +22,12 @@ const corsOptions = {
   
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Preflight support
-  
 
 app.use(express.json());
 
 app.use('/api/admin/auth', adminAuthRoutes);
+app.use('/api/admin/users', adminUserRoutes);
+app.use('/api/admin/projects', adminProjectRoutes); 
 
 // Routes
 const authRoutes = require('./routes/authRoutes');

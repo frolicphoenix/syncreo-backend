@@ -33,21 +33,26 @@ exports.getProposalsForFreelancer = async (req, res) => {
   }
 };
 
-// Get received proposals for all projects owned by a client
+// controllers/proposalController.js
 exports.getProposalsForClient = async (req, res) => {
   try {
+    console.log("Fetching proposals for client ID:", req.user.id); // Log client ID
     const projects = await Project.find({ client: req.user.id });
+    console.log("Projects found:", projects); // Log found projects
+
     const projectIds = projects.map((project) => project._id);
-    
     const proposals = await Proposal.find({ project: { $in: projectIds } })
-      .populate('freelancer', 'name email') // Populate freelancer name and email
-      .populate('project', 'title'); // Populate project title
+      .populate('freelancer', 'name email')
+      .populate('project', 'title');
+
+    console.log("Proposals found:", proposals); // Log found proposals
     res.json(proposals);
   } catch (error) {
     console.error('Error retrieving client proposals:', error);
     res.status(500).json({ error: 'Error retrieving proposals' });
   }
 };
+
 
 // Get a single proposal by ID
 exports.getProposalById = async (req, res) => {

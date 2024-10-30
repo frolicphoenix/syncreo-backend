@@ -1,4 +1,3 @@
-// controllers/searchController.js
 const User = require('../models/User');
 
 // Search for freelancers (available to clients)

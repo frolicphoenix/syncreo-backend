@@ -1,4 +1,3 @@
-// controllers/proposalController.js
 const Proposal = require('../models/Proposal');
 
 // Submit a new proposal (only for freelancers)

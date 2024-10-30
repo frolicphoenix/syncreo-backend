@@ -24,7 +24,7 @@ exports.createProject = async (req, res) => {
 exports.getAllProjects = async (req, res) => {
     try {
       const projects = await Project.find().populate('client', 'name email');
-    //   console.log('Fetched Projects:', projects);  // Log the fetched projects to see if data is returned
+    //   console.log('Fetched Projects:', projects);  
       if (!projects || projects.length === 0) {
         return res.status(404).json({ error: 'No projects found' });
       }

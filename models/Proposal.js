@@ -1,4 +1,3 @@
-// models/Proposal.js
 const mongoose = require('mongoose');
 
 const ProposalSchema = new mongoose.Schema({

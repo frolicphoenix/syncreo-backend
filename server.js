@@ -8,9 +8,9 @@ connectDB();
 
 const app = express();
 
-// Update CORS settings
+
 const corsOptions = {
-    origin: 'https://syncreo-ca4cce3d6642.herokuapp.com', // remove any trailing slash here
+    origin: 'https://syncreo-ca4cce3d6642.herokuapp.com', 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,

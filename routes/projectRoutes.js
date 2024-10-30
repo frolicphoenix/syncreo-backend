@@ -1,12 +1,15 @@
 // routes/projectRoutes.js
 const express = require('express');
-const { createProject, getAllProjects, getProjectById, searchProjects } = require('../controllers/projectController');
+const { createProject, getAllProjects, getProjectById, searchProjects, getClientProjects } = require('../controllers/projectController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 // POST /api/projects - Create a new project (only for clients)
 router.post('/', authMiddleware, createProject);
+
+// GET /api/projects/client-projects - Get projects posted by the authenticated client
+router.get('/client-projects', authMiddleware, getClientProjects); // New route for client's projects
 
 // GET /api/projects - Get all projects (for freelancers to view)
 router.get('/', authMiddleware, getAllProjects);
